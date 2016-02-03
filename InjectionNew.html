@@ -55,24 +55,25 @@
             <section>
                 <h2>Contents</h2>
 
-                <p><a href="#/2">1. What is it?</a></p>
-                <p><a href="#/3">2. Danger</a> </p>
-                <p><a href="#/4">3. Solution! </a></p>
-                <p><a href="#/5">4. How is it relevant to us?</a></p>
-                <p><a href="#/5/1">4.1 What should we do?</a></p>
-                <p><a href="#/5/2">4.2 Example</a></p>
+                <ol>
+                <li><a href="#/2">What is it?</a></li>
+                <li><a href="#/3">Danger</a> </li>
+                <li><a href="#/4">Solution! </a></li>
+                <li><a href="#/5">How is it relevant to us?</a></li>
+                <li><a href="#/5/1">What should we do?</a></li>
+                <li><a href="#/5/2">Example</a></li>
+                </ol>
             </section>
         </section>
 
         <section>
 
         <h2>What is it</h2>
-        <p>
-            Injection is where an application allows a user to enter untrusted data that can manipulate functionality – often for malicious purposes.
-        </p>
-        <p>
-            One of the most common is SQL Injection where an application has not used Bind Variables but instead concatenates fields.
-        </p>
+
+        <ul>
+        <li>Injection is where an application allows a user to enter untrusted data that can manipulate functionality – often for malicious purposes</li>
+        <li>One of the most common is SQL Injection where an application has not used Bind Variables but instead concatenates field</li>
+        </ul>
 						<pre><code class="hljs" data-trim contenteditable>
                             " SELECT * FROM   users "
                             ||" WHERE  username = '" || username || "'"
@@ -82,9 +83,9 @@
 
         <section>
             <h2>Danger</h2>
-            <p>
-                This is vulnerable to attack, take the following input:
-            </p>
+            <ul>
+            <li>This is vulnerable to attack, take the following input:</li>
+            </ul>
             <table style="border:1px solid #fff;background:#333;">
                 <tr>
                     <td>
@@ -109,31 +110,35 @@
                     </td>
                 </tr>
             </table>
-            <p>The the SQL Statement will be constructed as follows</p>
+            <ul>
+            <li>The the SQL Statement will be constructed as follows</li>
+
 					<pre><code class="hljs" data-trim contenteditable="false">
                         SELECT * FROM users
                         WHERE username = 'anything' AND password = 'a' OR 'a'='a';
                     </code></pre>
-            <p>As 'a' = 'a' for each row this query returns all rows for users.</p>
+            <li>As 'a' = 'a' for each row this query returns all rows for users.</li>
+            </ul>
         </section>
         </section>
 
         <section>
             <h2>Solution!</h2>
-            <p>
-                The solution to prevent against SQL Injection is to use Bind Variables
-            </p>
+            <ul>
+            <li>The solution to prevent against SQL Injection is to use Bind Variables</li>
+
+
 						<pre><code class="hljs" data-trim contenteditable="false">
                             sqlstmt := “SELECT * FROM users
                             WHERE username = :username AND password = :password”;
                         </code></pre>
-            <p>When executed the binds are substitued for the values</p>
+            <li>When executed the binds are substitued for the values</li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             EXECUTE IMMEDIATE sqlstmt USING username, password;
                         </code></pre>
-            <p>
-                By doing this it is impossible to inject malicious code into the query.
-            </p>
+            <li>By doing this it is impossible to inject malicious code into the query.</li>
+
+            </ul>
         </section>
         </section>
 
@@ -141,66 +146,69 @@
         <section>
             <section>
                 <h2>How is it relevant to us?</h2>
-                <p>
-                    When working with Scala/Play and MongoDB our applications are still <b style="color:#faa">vulnerable</b>.
-                </p>
-                <p>~~~</p>
-                <p>
-                    No-SQL does not eleminate the risk of injection.
-                </p>
+                <ul>
+                <li>When working with Scala/Play and MongoDB our applications are still <b style="color:#faa">vulnerable</b>.</li>
+
+                <li>No-SQL does not eliminate the risk of injection.</li>
+
+                </ul>
             </section>
 
             <section>
                 <h2>What should we do?</h2>
-                <p>
-                    The solution is the same. Avoid concatenation when building query strings.
-                </p>
-                <p>~~~</p>
-                <p>
-                    Instead use pre-defined APIs supplied with the MongoDB Driver to construct the query.
-                </p>
+                <ul>
+                <li>The solution is the same. Avoid concatenation when building query strings.</li>
+                <li>Instead use pre-defined APIs supplied with the MongoDB Driver to construct the query.</li>
+                </ul>
             </section>
 
             <section>
-                <p>Vulnerable:</p>
+                <ul>
+                <li>Vulnerable:</li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             val vulnerableLogin  = MongoDBObject("{ username: '" + username + "',
                             password: '" + password + "' }")
                         </code></pre>
-                <p>~~~</p>
-                <p>Protected:</p>
+
+                <li>Protected:</li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             val protectedLogin = MongoDBObject("username" -> username,
                             "password" -> password)
                         </code></pre>
+                </ul>
             </section>
 
             <section>
                 <section>
                     <h2>Example</h2>
-                    <p>Scala/PLay App: <a href="//localhost:3000">localhost:3000</a></p>
-                    <p>MongoDB Server: <a href="//localhost:27017">localhost:27017</a></p>
-                    <p><br/>
+                    <ul>
+                    <li>Scala/PLay App: <a href="//localhost:3000">localhost:3000</a></li>
+                    <li>MongoDB Server: <a href="//localhost:27017">localhost:27017</a></li>
+                    <br/>
                         <small>Note the example uses the Casbah MongoDB Scala Driver. Other drivers are available.</small>
                         <br/><small>Screenshots Below</small></p>
+                    </ul>
                 </section>
              </section>
 
               <section>
                 <section>
                     <h2>Demo App</h2>
-                    <p>The InjectionDemo application executes two MongoDB queries. One prone to injection the other protected.
-                    <p>~~~</p>
-                    <p>Vulnerable:</p>
+                    <ul>
+
+                    <li>The InjectionDemo application executes two MongoDB queries. One prone to injection the other protected.</li>
+
+                    <li>Vulnerable:</li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             val vulnerableLogin  = MongoDBObject("{ username: '" + username + "',
                             password: '" + password + "' }")
                         </code></pre>
-                    <p>Protected:</p>
+                    <li>Protected:</li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             val protectedLogin = MongoDBObject("username" -> username,
                             "password" -> password)
                         </code></pre>
+                    </ul>
                 </section>
               </section>
 
@@ -216,7 +224,8 @@
 
                 <section>
                     <h2>MongoDB Documents</h2>
-                    <p>Within the <b>mp</b> database there is a <b>users</b> collection with the following documents</p>
+                    <ul>
+                    <li>Within the <b>mp</b> database there is a <b>users</b> collection with the following documents</li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             > db.users.find().pretty()
                             {
@@ -235,14 +244,16 @@
                             "password" : "supersecret1234"
                             }
                         </code></pre>
+                    </ul>
                 </section>
 
             <Section>
                 <h2>Exploiting the Vulnerability</h2>
-                <p>
+                <ul>
+                <li>
                     <small>If the user guesses that there is an admin user then the account can be logged into
                         without the need of the admin password.</small>
-                </p>
+                </li>
                 <table style="border:1px solid #fff;background:#333;">
                     <tr>
                         <td>
@@ -267,18 +278,19 @@
                         </td>
                     </tr>
                 </table>
-                <p>
+                <li>
                     <small>The concatenated JSON string is:</small>
-                </p>
+                </li>
 						<pre><code class="hljs" data-trim contenteditable="false">
                             { "username" : "admin" ,
                             "$or" : [ { } ,{ "a" : "a" , "password" : ""}] ,
                             "$comment" : "hacked"}
                         </code></pre>
-                <p>
+                <li>
                     <small>Because a document of {} will always return true to the $OR it doesn't matter that the password isn't supplied
                         and so the result is...</small>
-                </p>
+                </li>
+                </ul>
             </section>
 
 
