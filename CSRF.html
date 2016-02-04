@@ -86,7 +86,7 @@
 
 					<section data-background-color="#7F292F">
 						<p>
-							The forged request contains  <b style="color:#FFFD87;">all</b> the the information sent by the browser and so it can
+							The forged request contains  <b style="color:#FFFD87;">all</b> the information sent by the browser and so it can
 							<b style="color:#FFFD87;">ride</b> on the back of the authenticated session.
 						</p>
 						<p>~~~</p>
@@ -162,46 +162,30 @@
 					<section>
 						<h2>Example</h2>
 						<p>Scala/Play App: <a href="//localhost:3000">localhost:3000</a></p>
-						<p>MongoDB Server: <a href="//localhost:27017">localhost:27017</a></p>
-						<p><br />
-							<small>Note the example uses the Casbah MongoDB Scala Driver. Other drivers are available.</small>
-							<br /><small>Screenshots Below</small></p>
 					</section>
 
 					<section>
-						<h2>Demo App</h2>
-						<p>
-							The XSSDemo application is an example of <br /><b style="color:#FFFD87">Stored</b> XSS Attacks.
-						</p>
-						<p>~~~</p>
-						<p>
-							The MongoDB Databases stores comments and <br /><b style="color:#FFFD87">allows</b> HTML markup.
-						</p>
-						<p>~~~</p>
-						<p>
-							The comments are then retrieved in a vulnerable manner and non-vulnerable manner.
-						</p>
-						</code></pre>
+						CSRF protected form with Synchronizer Token
+						<img src="/images/tokenform.png" />
+					</section>
+
+					<section>
+						Play validates the token and processes the transfer successfully
+						<img src="/images/tokenResult.png" />
 					</section>
 
 
 					<section>
-						Comments Page
-						<img src="/images/addComment.png" />
+						Malicious Forged Request with no Synchronizer Token
+						<img src="/images/forged.png" />
 					</section>
 
 					<section>
-						All Comments
-						<img src="/images/allComments.png" />
+						Play traps that there is no token and rejects the request
+						<img src="/images/forgedResult.png" />
 					</section>
 
 
-				</section>
-
-
-
-				<section style="text-align: left;">
-					<h1>fin</h1>
 				</section>
 
 			</div>

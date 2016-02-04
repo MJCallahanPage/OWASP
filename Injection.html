@@ -52,7 +52,7 @@
 				</section>
 
 				<section>
-					<section>
+					<section data-background-color="#147D7F">
 
 						<h2>What is it</h2>
 						<p>
@@ -97,10 +97,10 @@
 								</td>
 							</tr>
 						</table>
-						<p>The the SQL Statement will be constructed as follows</p>
+						<p>The SQL Statement will be constructed as follows</p>
 					<pre><code class="hljs" data-trim contenteditable="false">
 SELECT * FROM users
-WHERE username = 'anything' AND password = 'a' OR 'a'='a';
+WHERE username = 'anything' AND password = 'a' OR 'a'='a'
 					</code></pre>
 						<p>As 'a' = 'a' for each row this query returns all rows for users.</p>
 					</section>
@@ -111,12 +111,12 @@ WHERE username = 'anything' AND password = 'a' OR 'a'='a';
 							The solution to prevent against SQL Injection is to use Bind Variables
 						</p>
 						<pre><code class="hljs" data-trim contenteditable="false">
-	sqlstmt := “SELECT * FROM users
-	WHERE username = :username AND password = :password”;
+sqlstmt := “SELECT * FROM users
+WHERE username = :username AND password = :password”;
 						</code></pre>
 						<p>When executed the binds are substitued for the values</p>
 						<pre><code class="hljs" data-trim contenteditable="false">
-	EXECUTE IMMEDIATE sqlstmt USING username, password;
+EXECUTE IMMEDIATE sqlstmt USING username, password;
 						</code></pre>
 						<p>
 							By doing this it is impossible to inject malicious code into the query.
@@ -133,33 +133,58 @@ WHERE username = 'anything' AND password = 'a' OR 'a'='a';
 						</p>
 						<p>~~~</p>
 						<p>
-							No-SQL does not eleminate the risk of injection.
+							<b style="color:#FFFD87">NoSQL</b> does not eliminate the risk of injection.
+						</p>
+						<p>
+							<small>
+								A <b style="color:#FFFD87">NoSQL</b> database provides a mechanism for storage and retrieval of data
+								which is modeled in means other than the tabular relations used in relational databases. MongoDB is
+								an example of a NoSQL database.
+							</small>
 						</p>
 					</section>
 
 					<section>
 						<h2>What should we do?</h2>
 						<p>
-							The solution is the same. Avoid concatenation when building query strings.
+							The solution is the same. <b style="color:#FFFD87">Avoid concatenation</b> when building query strings.
 						</p>
 						<p>~~~</p>
 						<p>
-							Instead use pre-defined APIs supplied with the MongoDB Driver to construct the query.
+							Instead <b style="color:#FFFD87">use pre-defined APIs</b> supplied with the MongoDB Driver to construct the query.
 						</p>
 					</section>
 
 					<section>
-						<p>Vulnerable:</p>
+						<h2>Concatenated Example</h2>
+						<p>MongoDB is queried using <b style="color:#FFFD87">JSON documents</b></p>
+						<p>If the JSON document is built using concatenation, then the query is <b style="color:#FFFD87">vulnerable</b> to injection.
 						<pre><code class="hljs" data-trim contenteditable="false">
 val vulnerableLogin  = MongoDBObject("{ username: '" + username + "',
 password: '" + password + "' }")
 						</code></pre>
-						<p>~~~</p>
-						<p>Protected:</p>
+						<br />
+						<p>
+							<small>
+								<b style="color:#FFFD87">JSON</b> (JavaScript Object Notation) is a lightweight data-interchange format.
+							</small>
+						</p>
+					</section>
+
+
+					<section>
+						<h2>API Constructor Example</h2>
+						<p>
+							An approach that protects against injection is by using the <b style="color:#FFFD87">MongoDBObject</b> constructor API provided by the
+							MongoDB driver.
+						</p>
 						<pre><code class="hljs" data-trim contenteditable="false">
 val protectedLogin = MongoDBObject("username" -> username,
 "password" -> password)
 						</code></pre>
+						<p>
+							This has the same effect as Bind Variables do in SQL statements in that this query can no longer be malformed.
+						</p>
 					</section>
 
 				</section>
@@ -274,12 +299,6 @@ val protectedLogin = MongoDBObject("username" -> username,
 						<img src="/images/hacked.png" />
 					</section>
 
-				</section>
-
-
-
-				<section style="text-align: left;">
-					<h1>fin</h1>
 				</section>
 
 			</div>
