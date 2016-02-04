@@ -15,7 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -28,123 +28,107 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
-
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
 	</head>
 
 	<body>
 
 		<div class="reveal">
-
-			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
 				<!-- Title Page -->
-				<section data-background-image="/images/matrix.gif" data-background-size="400px" data-background-repeat="repeat">
-					<div style="background-color:rgba(0,100,25,0.6);border-radius:50px;border:5px solid #fff;padding:50px;">
-						<h2>Cross-Site Request Forgery (CSRF)</h2>
-						<p>Research into OWASP Top 10 Risk List</p>
+				<section>
+						<h1>OWASP A8</h1>
+						<h3>Cross-Site Request Forgery (CSRF)</h3>
 						<p>
 							<br />
 							<small>Created by Matt Page - <a href="mailto:matthew.page@digital.hmrc.gov.uk">Matthew.Page@digital.hmrc.gov.uk</a> </small>
 						</p>
-					</div>
 				</section>
 
-				<!-- Introduction -->
 				<section>
+					<h2>Contents</h2>
 
-					<!-- What is CSRF? -->
-					<section data-background-color="#147D7F">
-						<h2>What is it?</h2>
-						<p>
-							Cross-Site Request Forgery CSRF (or XSRF) is an attack that tricks an authenticated victim into submitting a malicious request.
-						</p>
-						<p>
-							~~~
-						</p>
-						<p>
-							These attacks are also known as <b style="color:#FFFD87;">One-click attack</b> or <b style="color:#FFFD87;">Session Riding</b>.
-						</p>
-					</section>
-
-					<!-- How do they work? -->
-					<section data-background-color="#7F292F">
-						<h2>
-							How do they work?
-						</h2>
-						<p>
-							The attacks exploit the fact that a user is authenticated with a particular site.
-						</p>
-						<p>~~~</p>
-						<p>
-							An attacker can forge a malicious request that the application believes is coming from a trusted user.
-						</p>
-					</section>
-
-					<section data-background-color="#7F292F">
-						<p>
-							The forged request contains  <b style="color:#FFFD87;">all</b> the information sent by the browser and so it can
-							<b style="color:#FFFD87;">ride</b> on the back of the authenticated session.
-						</p>
-						<p>~~~</p>
-						<p>
-							Therefore, using  <b style="color:#FFFD87;">only</b> cookies and session data to prove the users authenticity is  <b style="color:#FFFD87;">not sufficient</b>.
-						</p>
-					</section>
-
+					<ol>
+						<li><a href="#/csrf-description">What is Cross-Site Request Forgery (CSRF)?</a></li>
+						<li><a href="#/csrf-how-inform">How do the attacks work?</a></li>
+						<li><a href="#/csrf-play">Relevance to Play! framework</a></li>
+						<li><a href="#/csrf-play-example">Play! example</a></li>
+					</ol>
 				</section>
 
+				<section>
+					<section id="csrf-description">
+						<h2>What is it?</h2>
+						<ul>
+							<p>
+								<li>Cross-Site Request Forgery CSRF (or XSRF) is an attack that tricks an authenticated victim into submitting a malicious request.</li>
+								<li>These attacks are also known as <b style="color:#FFFD87;">One-click attack</b> or <b style="color:#FFFD87;">Session Riding</b></li>
+							</p>
+						</ul>
+					</section>
+				</section>
 
+				<section>
+					<section id="csrf-how-inform">
+						<h2>How do they work?</h2>
+						<ul>
+							<p>
+								<li>The attacks exploit the fact that a user is authenticated with a particular site.</li>
+								<li>An attacker can forge a malicious request that the application believes is coming from a trusted user.</li>
+							</p>
+						</ul>
+					</section>
 
-				<section data-background-color="#45497F">
 					<section>
+						<h2>How do they work (cont.)</h2>
+						<ul>
+							<p>
+								<li>The forged request contains  <b style="color:#FFFD87;">all</b> the the information sent by the browser and so it can
+								<b style="color:#FFFD87;">ride</b> on the back of the authenticated session.</li>
+								<li>Therefore, using  <b style="color:#FFFD87;">only</b> cookies and session data to prove the users authenticity is  <b style="color:#FFFD87;">not sufficient</b>.</li>
+							</p>
+						</ul>
+
+					</section>
+				</section>
+
+				<section>
+					<section id="csrf-play">
 					<!-- How is it relevant to us? -->
-					<p>
 						<h2>How is it relevant to us?</h2>
-						<p>
-							When working with Scala/Play our applications are <b style="color:#FF6F75">vulnerable</b> to CSRF attacks.
-						</p>
-						<p>~~~</p>
-						<p>
-						We need guarantee a request has been triggered intentionally by a user and is not forged; this can be achieved by:
-
-							<ul>
-								<li><b style="color:#FFFD87;">Synchronizer Token</b> design pattern.</li>
-								<li><b style="color:#FFFD87;">Global CSRF Filter</b></li>
-							</ul>
-						</p>
-
+						<ul>
+							<p>
+								<li>When working with Scala/Play our applications are <b style="color:#FF6F75">vulnerable</b> to CSRF attacks.</li>
+								<li>We need guarantee a request has been triggered intentionally by a user and is not forged; this can be achieved by:
+									<ul>
+										<li><b style="color:#FFFD87;">Synchronizer Token</b> design pattern.</li>
+										<li><b style="color:#FFFD87;">Global CSRF Filter</b></li>
+									</ul>
+								</li>
+							</p>
+						</ul>
 					</section>
 
 					<section>
-						<h2><b style="color:#FFFD87;">Synchronizer Token</b></h2>
-						<p>
-							When the user logs in a randomized string (token) is placed in the users session.
-						</p>
-						<p>~~~</p>
-						<p>
-							Every form that is used to post requests to the server includes a hidden field containing the token.
-						</p>
-						<p>~~~</p>
-						<p>
-							The request handler validates that the submitted token matches the token stored in the session.
-						</p>
-
+						<h2>Synchronizer Token</h2>
+						<ul>
+							<p>
+								<li>When the user logs in a randomized string (token) is placed in the users session.</li>
+								<li>Every form that is used to post requests to the server includes a hidden field containing the token.</li>
+								<li>The request handler validates that the submitted token matches the token stored in the session.</li>
+							</p>
+						</ul>
 					</section>
 
 					<section>
-						<h2><b style="color:#FFFD87;">Global CSRF Filter</b></h2>
-						<p>
-							Play provides a global CSRF filter than can be applied to all requests.
-							This implements the Synchronizer Token design pattern. More information
-							<a href="https://www.playframework.com/documentation/2.2.x/ScalaCsrf">here</a>.
-						</p>
-						<p>
-							Play even provides some template helpers to add a CSRF Token to a form.
-						</p>
+						<h2>Global CSRF Filter</h2>
+						<ul>
+							<p>
+								<li>Play provides a global CSRF filter than can be applied to all requests.</li>
+								<li>This implements the Synchronizer Token design pattern. More information <a href="https://www.playframework.com/documentation/2.2.x/ScalaCsrf" target="_blank">here</a>.</li>
+								<li>Play even provides some template helpers to add a CSRF Token to a form.</li>
+							</p>
+						</ul>
 						<pre><code>@form(routes.ItemsController.save()) {
 	@CSRF.formField
 	...
@@ -158,8 +142,8 @@
 
 				</section>
 
-				<section data-background-color="#437F70">
-					<section>
+				<section>
+					<section id="csrf-play-example">
 						<h2>Example</h2>
 						<p>Scala/Play App: <a href="//localhost:3000">localhost:3000</a></p>
 					</section>
@@ -185,7 +169,10 @@
 						<img src="/images/forgedResult.png" />
 					</section>
 
+				</section>
 
+				<section>
+					<h1>Fin</h1>
 				</section>
 
 			</div>
