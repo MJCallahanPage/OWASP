@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>reveal.js – The HTML Presentation Framework</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+    <section>
+        <section>
+            <h1>OWASP A5</h1>
+            <h3> Security Misconfiguration </h3>
+
+            <p>
+                <br />
+                <small>Created by Vincent Tomlinson - <a href="mailto:vincent.tomlinson@digital.hmrc.gov.uk">Vincent.Tomlinson@digital.hmrc.gov.uk</a> </small>
+            </p>
+            <h4><a href="/">Back to Main Contents</a></h4>
+        </section>
+    </section>
+
+        <section>
+            <section>
+                <h2>Contents</h2>
+                <ol>
+                <li><a href="#/2">1. What is Security Misconfiguration?</a></li>
+                <li><a href="#/2/1">1.2. Finding flaws</a> </li>
+                <li><a href="#/2/2">1.3. Exploiting flaws </a></li>
+                <li><a href="#/3">2. Where could this happen?</a></li>
+                <li><a href="#/3/1">3. What can be done?</a></li>
+                </ol>
+           </section>
+        </section>
+
+    <section>
+        <section>
+            <h2>What is Security Misconfiguration?</h2>
+            <p>
+                <ul>
+                <li>It is the incorrect assembly of safeguards for a web application.</li>
+                <li>These typically occur when there are 'holes' left in the security framework
+                of an application by system administrators or developers.</li>
+                </ul>
+
+            </p>
+        </section>
+
+        <section>
+            <p>
+                Attackers with malicious intent can find these holes via:
+            </p>
+            <ul>
+                <li>Unauthorized access to default accounts</li>
+                <li>Unused webpages</li>
+                <li>Unpatched flaws</li>
+                <li>Misuse of default passwords</li>
+                <li>Excessive debugging information disclosure</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>
+                Were an attacker to exploit such flaws, the consequences could include:
+            </p>
+         <ul>
+            <li>Data could be stolen or modified.</li>
+            <li>Partial or full data loss</li>
+            <li>Compromise of full system</li>
+            <li>Expensive recovery</li>
+         </ul>
+        </section>
+    </section>
+
+        <section>
+            <section>
+                <h2>Where could this happen?</h2>
+                <p>Security misconfiguration could happen at one, many or all of these levels:</p>
+                <ul>
+                    <li>Operating system or platform</li>
+                    <li>Web Server</li>
+                    <li>Application Server</li>
+                    <li>Database Server</li>
+                    <li>Framework</li>
+                    <li>Custom Code</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>What can be done?</h2>
+                <p>Despite the ease of exploitation that Security Misconfiguration possesses,
+                there are a number of ways to prevent such exploitation from happening.</p>
+                  <ol>
+                    <li>Keep all software up to date</li>
+                    <li>Disable any unnecessary files or features</li>
+                    <li>Do not present stack tracers to users</li>
+                </ol>
+            </section>
+        </section>
+
+
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+</body>
+</html>

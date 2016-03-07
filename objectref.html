@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js – The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="James Forster">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<div>
+						<h1>OWASP A4</h1>
+						<h3>Insecure Direct Object Reference</h3>
+						<p>
+							<br />
+							<small>Created by James Forster - <a href="mailto:james.forster@digital.hmrc.gov.uk">James.Forster@digital.hmrc.gov.uk</a> </small>
+						</p>
+						<h4><a href="/">Back to Main Contents</a></h4>
+					</div>
+				</section>
+
+				<section>
+					<h2>Contents</h2>
+					<ol>
+						<li><a href="#/flaw-description">What is it?</a></li>
+						<li><a href="#/flaw-solution">Solution</a></li>
+						<li><a href="#/flaw-play">Relevance to Play! framework</a></li>
+					</ol>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section id="flaw-description">
+						<h2>What is it?</h2>
+						<ul>
+							<li><p>This type of security flaw can occur when the developer exposes an object through the URL, form parameter or a cookie directly.</p></li>
+						</ul>
+						<pre><code class="hljs" data-trim>
+							http://www.website.com/?accountid=1
+						</code></pre>
+					</section>
+					<section>
+						<h2>Utilising the flaw</h2>
+						<ul>
+							<li><p>The potential intruder would first require access to an account of their own and the secure content it contains.</p></li>
+							<li><p>Because the direct reference is exposed it can be manually edited.</p></li>
+							<li><p>Changing this could result in access to data not intended for that user.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?accountid=2
+							</code></pre>
+						</ul>
+					</section>
+					<section>
+						<h2>Escalation of Privilege</h2>
+						<ul>
+							<li><p>Horizontal escalation of privilege is where you simply access data from another account where access level remains the same.</p></li>
+							<li><p>Vertical escalation of privilege is where a higher level of access can be gained such as admin information.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?accountid=2&admin=true
+							</code></pre>
+						</ul>
+					</section>
+					<section>
+						<h2>Path Traversal</h2>
+						<ul>
+							<li><p>The flaw can also extend to directory and file references.</p></li>
+							<li><p>By changing any file reference in the same manner the intruder can gain access to non-intended files.</p></li>
+							<li><p>Utilising common directory change commands (such as ../) potentially any file on the server can be accessed in this manner.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?/../../admin/passwords.txt
+							</code></pre>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section id="flaw-solution">
+						<h2>Solution!</h2>
+						<ul>
+							<li><p>The simplest solution is to not expose any URL or form parameters at all.</p></li>
+							<li><p>There are three potential ways to solve the problem beyond this:</p></li>
+							<ul>
+								<li>Obfuscation</li>
+								<li>White/Blacklisting</li>
+								<li>Verification</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h2>Obfuscation</h2>
+						<ul>
+							<li><p>Passing the reference through a mapping function obscures the reference, making it indirect.</p></li>
+							<li><p>With an indirect reference it becomes very difficult to make a valid edit as an intruder.</p></li>
+							<li><p>While potentially less secure this can also be persisted beyond the session via encryption.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?accountid=Xvqw2JEm84w1qqLN1vE5XZUdc7BFqarB0
+							</code></pre>
+						</ul>
+					</section>
+					<section id="flaw-files">
+						<h2>Whitelist</h2>
+						<ul>
+							<li><p>A simple solution is to only permit access to certain files and pages as part of the request.</p></li>
+							<li><p>However it cannot prevent intruders from accessing files or pages that are accessible by any users.</p></li>
+						</ul>
+					</section>	
+					<section>
+						<h2>Filters/Blacklists</h2>
+						<ul>
+							<li><p>A blacklist can be used to prevent dangerous edits by checking for certain characters.</p></li>
+							<li><p>However a blacklist has to be comprehensive to stop all malicious edits.</p></li>
+							<li><p>Whitelists provide a much more secure, but restrictive option.</p></li>
+						</ul>
+					</section>
+					<section>
+						<h2>Verification</h2>
+						<ul>
+							<li><p>One way to close this security flaw is to simply double check the identity of the user on each request.</p></li>
+							<li><p>This stops any abuse of direct object references.</p></li>
+							<pre><code class="hljs" data-trim>
+[Authorize]
+public class AccountsController : Controller
+{
+	[HttpGet]
+	public ActionResult Details(long accountNumber)
+	{
+		Account account = _accountRepository.Find(accountNumber);
+		if (account.UserId != User.Identity.GetUserId())
+			{
+				return new HttpUnauthorizedResult("User is not Authorized.");
+			} 
+       						</code></pre>
+       					</ul>
+					</section>
+				</section>
+
+				<!-- <section>
+					<section id="flaw-secure">
+						<h2>Securing the reference</h2>
+						<p>There is an absolute method of preventing unauthorised access to any information or file which none of the previously described methods can completely do.</p>
+						<p>The solution is simply to verify that the user requesting access to any information or file is checked at each request, not simply at login.</p>
+					</section>
+					<section>
+						<h2>Privilege checks</h2>
+						<p>The simplest level of verification checks is to examine the level of authority the requesting user has, not the URL or form information.</p>
+						<p>This shuts down the potential of vertical escalation and path traversal as any changes would not affect the level of authorisation of the original login session.</p>
+					</section>
+					<section>
+						<h2>Verification</h2>
+						<p>To be absolutely secure in preventing this security flaw you can simply double check the identity of the user on each request.</p>
+						<p>This closes all potential of abusing any direct object references.</p>
+						
+					</section>
+				</section> -->
+
+<!-- 				<section id="flaw-play">
+					<h2>How is it relevant to us?</h2>
+					<ul>
+						<li><p>
+							When working with Scala/Play our applications are still <b style="color:#faa">vulnerable</b>.
+						</p></li>
+						<p>~~~</p>
+
+						<p>All web frameworks are potentially vulnerable to this security flaw as it is a case of bad user practice most of the time.</p>
+						<p>However it is worth noting that Play! encourages practices through its' design which help prevent the creation of this flaw.</p>
+					</ul>
+				</section> -->
+
+				<section id="flaw-summary">
+					<h1>Fin</h1>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
